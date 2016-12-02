@@ -78,7 +78,7 @@ function start() {
   startButton.disabled = true;
   navigator.mediaDevices.getUserMedia({
     audio: true,
-    video: true
+    video: false
   })
   .then(gotStream)
   .catch(function(e) {

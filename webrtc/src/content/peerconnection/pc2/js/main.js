@@ -128,7 +128,7 @@ function call() {
   };
   pc1.ontrack = function(e){
     trace('pc1 onTrack ' + e.streams.length);
-    trace('pc1 remoteStream.length = ' + pc1.getRemoteStream().length);
+    trace('pc1 remoteStream.length = ' + pc1.getRemoteStreams().length);
     var remoteStream = e.streams[0];
     remoteVideo.srcObject = remoteStream;
     var vts = remoteStream.getVideoTracks();

@@ -382,7 +382,7 @@ function hangup() {
 var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 function loadFakeAudioStream(path, callback) {
-  var request = newXMLHttpRequest();
+  var request = new XMLHttpRequest();
   trace('mark - request');
   request.open('GET', path, true);
   trace('mark - open');

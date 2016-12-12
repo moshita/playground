@@ -8,6 +8,12 @@
 
 'use strict';
 
+
+var instantMeter = document.querySelector('#instant meter');
+var slowMeter = document.querySelector('#slow meter');
+var clipMeter = document.querySelector('#clip meter');
+
+
 var startButton = document.getElementById('startButton');
 var callButton = document.getElementById('callButton');
 var hangupButton = document.getElementById('hangupButton');

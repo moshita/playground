@@ -18,7 +18,6 @@ callButton.onclick = call;
 hangupButton.onclick = hangup;
 
 var signaling1 = new WebSocket("wss://test.moshita.xyz");
-var signaling2 = new WebSocket("wss://test.moshita.xyz");
 
 var startTime;
 var localVideo = document.getElementById('localVideo');
@@ -90,7 +89,6 @@ remoteVideo.onresize = function() {
 */
 var localStream;
 var pc1;
-var pc2;
 var offerOptions = {
   offerToReceiveAudio: 1,
   offerToReceiveVideo: 1
@@ -200,34 +198,6 @@ function call() {
     }
   }
 
-  // Set Up PC2
-  pc2 = new RTCPeerConnection(servers);
-  trace('Created remote peer connection object pc2');
-  pc2.onicecandidate = function(e) {
-    onIceCandidate(pc2, e);
-  };
-  onIceStateChange(pc2);
-  pc2.oniceconnectionstatechange = function(e) {
-    onIceStateChange(pc2, e);
-  };
-  pc2.onaddstream = gotRemoteStream;
-  signaling2.onmessage = function (message) {
-    var dataJson = JSON.parse(message.data);
-    if(dataJson.sdp != undefined) {
-      if(dataJson.type == 'offer') {
-        receiveOffer(pc2, new RTCSessionDescription(dataJson));
-      } else {
-        receiveAnswer(pc2, new RTCSessionDescription(dataJson));
-      }
-    } else if (dataJson.candidate != null) {
-      trace('Trickle Candidates are not expected');
-    } else if (dataJson.command == 'resendOffer') {
-      sendOffer(pc2, pc2.localDescription);
-    } else {
-      trace('Unknown event ' + dataJson.toString());
-    }
-  }
-
   // Start Call by adding localStream to pc1
   pc1.addStream(localStream);
   trace('Added local stream to pc1');
@@ -248,28 +218,6 @@ function onCreateOfferSuccess(pc, desc) {
     },
     onSetSessionDescriptionError
   );
-  
-  // otherPc = pc2
-  /*
-  var otherPc = getOtherPc(pc);
-  trace(getName(otherPc) + ' setRemoteDescription start');
-  otherPc.setRemoteDescription(desc).then(
-    function() {
-      onSetRemoteSuccess(otherPc);
-    },
-    onSetSessionDescriptionError
-  );
-  trace(getName(otherPc) + ' createAnswer start');
-  // Since the 'remote' side has no media stream we need
-  // to pass in the right constraints in order for it to
-  // accept the incoming offer of audio and video.
-  otherPc.createAnswer().then(
-    function (desc) {
-      onCreateAnswerSuccess(otherPc, desc);
-    },
-    onCreateSessionDescriptionError
-  );
-  */
 }
 
 function sendOffer(pc, desc) {
@@ -323,10 +271,6 @@ function onSetSessionDescriptionError(error) {
   trace('Failed to set session description: ' + error.toString());
 }
 
-function gotRemoteStream(e) {
-  remoteVideo.srcObject = e.stream;
-  trace('received remote stream');
-}
 
 function onCreateAnswerSuccess(pc, desc) {
   // pc = pc2
@@ -339,17 +283,6 @@ function onCreateAnswerSuccess(pc, desc) {
     },
     onSetSessionDescriptionError
   );
-  
-  /*
-  var otherPc = getOtherPc(pc);
-  trace(getName(otherPc) + ' setRemoteDescription start');
-  otherPc.setRemoteDescription(desc).then(
-    function() {
-      onSetRemoteSuccess(otherPc);
-    },
-    onSetSessionDescriptionError
-  );
-  */
 }
 
 function sendAnswer(pc, desc) {

@@ -120,6 +120,14 @@ function getSignaling(pc) {
   return (pc === pc1) ? signaling1 : signaling2;
 }
 
+function insertFakeAudio(stream) {
+  loadFakeAudioStream('./audio/obama.mp3', function(fake) {
+    stream.removeTrack(stream.getAudioTracks()[0]);
+    stream.addTrack(fake.getAudioTracks()[0]);
+    gotStream(stream);
+  });
+}
+
 function gotStream(stream) {
   trace('Received local stream');
   localVideo.srcObject = stream;
@@ -134,7 +142,8 @@ function start() {
     audio: true,
     video: true
   })
-  .then(gotStream)
+//  .then(gotStream)
+  .then(insertFakeAudio)
   .catch(function(e) {
     alert('getUserMedia() error: ' + e.name);
   });
@@ -368,4 +377,27 @@ function hangup() {
   pc2 = null;
   hangupButton.disabled = true;
   callButton.disabled = false;
+}
+
+var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+function loadFakeAudioStream(path, callback) {
+  var request = newXMLHttpRequest():
+  request.open('GET', path, true);
+  request.responseType = 'arraybuffer';
+  
+  request.onload = function() {
+    var audioData = request.response;
+    audioCtx.decodeAudioData(audioData).then(function(buffer) {
+      var source = audioCtx.createBufferSource();
+      var node = audioCtx.createMediaStreamDestination();
+      
+      source.buffer = buffer;
+      source.connect(node);
+      
+      source.start(0);
+      
+      callback(node.stream);
+    });
+  }
 }

@@ -121,6 +121,7 @@ function getSignaling(pc) {
 }
 
 function insertFakeAudio(stream) {
+  trace('Loading fake stream');
   loadFakeAudioStream('./audio/obama.mp3', function(fake) {
     stream.removeTrack(stream.getAudioTracks()[0]);
     stream.addTrack(fake.getAudioTracks()[0]);
@@ -142,7 +143,6 @@ function start() {
     audio: true,
     video: true
   })
-//  .then(gotStream)
   .then(insertFakeAudio)
   .catch(function(e) {
     alert('getUserMedia() error: ' + e.name);

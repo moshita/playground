@@ -23,7 +23,6 @@ video {
 
 video#localVideo {
   margin: 0 20px 20px 0;
-  float: left;
 }
 
 @media screen and (max-width: 400px) {
@@ -48,8 +47,8 @@ video#localVideo {
 }
 
 #meters {
-  width: 30%;
-  float: left;
+  width: 45%;
+  display: inline-block;
 }
 
 div#meters > div {
@@ -68,7 +67,7 @@ div#meters div.value {
 }
 
 meter {
-  width: 20%;
+  width: calc(100% - 5em);
 }
 
 meter#clip {

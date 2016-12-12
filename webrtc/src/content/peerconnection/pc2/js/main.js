@@ -22,12 +22,40 @@ var signaling2 = new WebSocket("wss://test.moshita.xyz");
 
 var startTime;
 var localVideo = document.getElementById('localVideo');
-var remoteVideo = document.getElementById('remoteVideo');
+//var remoteVideo = document.getElementById('remoteVideo');
+var remoteVideos = document.getElementById('remoteVideos');
 
 localVideo.addEventListener('loadedmetadata', function() {
   trace('Local video videoWidth: ' + this.videoWidth +
     'px,  videoHeight: ' + this.videoHeight + 'px');
 });
+
+function onRemoteStream(stream) {
+  if(document.getElementById(stream.id) == undefined) {
+    addRemoteVideo(stream);
+  } else {
+    trace('Event for existing stream');
+  }
+}
+
+function addRemoteVideo(stream){
+  var rv = document.createElement('video');
+  rv.id = stream.id;
+  rv.autoplay = true;
+  rv.addEventListener('loadedmetadata', function() {
+    trace('Remote video videoWidth: ' + this.videoWidth +
+      'px,  videoHeight: ' + this.videoHeight + 'px - ' + rv.id );
+  });
+
+  rv.onresize = function() {
+    trace('Remote video size changed to ' +
+    rv.videoWidth + 'x' + rv.videoHeight + ' - ' + rv.id);
+  };
+  
+  rv.srcObject = stream;
+
+  remoteVideos.appendChild(rv);
+}
 
 remoteVideo.addEventListener('loadedmetadata', function() {
   trace('Remote video videoWidth: ' + this.videoWidth +
@@ -129,8 +157,9 @@ function call() {
   pc1.ontrack = function(e){
     trace('pc1 onTrack ' + e.streams.length);
     trace('pc1 remoteStream.length = ' + pc1.getRemoteStreams().length);
-    var remoteStream = e.streams[0];
-    remoteVideo.srcObject = remoteStream;
+    //var remoteStream = e.streams[0];
+    //remoteVideo.srcObject = remoteStream;
+    onRemoteStream(remoteStream);
     var vts = remoteStream.getVideoTracks();
     var ats = remoteStream.getAudioTracks();
     if (vts.length > 0) {

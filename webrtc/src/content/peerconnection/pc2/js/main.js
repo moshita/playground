@@ -69,6 +69,20 @@ function addRemoteVideo(stream){
 
   remoteMedia.appendChild(rv);
 }
+
+function cleanRemoteMedia(pc) {
+  var validRemoteStreams = pc.getRemoteStreams();
+  var elementsToRemove = Array.from(remoteMedia.children).filter(function(child) {
+    return (validRemoteStreams.find(function(stream) {
+      return stream.id == child.id;
+    }) === undefined);
+  });
+  
+  elementsToReave.forEach(function(elm) {
+    elem.remove();
+  });
+}
+
 /*
 remoteVideo.addEventListener('loadedmetadata', function() {
   trace('Remote video videoWidth: ' + this.videoWidth +
@@ -154,6 +168,9 @@ function call() {
   };
   pc1.onsignalingstatechange = function(e) {
     trace('pc1 signalingState ' + pc1.signalingState);
+    if(pc1.signalingState === 'stable') {
+      cleanRemoteMedia(pc1);
+    }
   };
   pc1.onnegotiationneeded = function(e) {
     trace('pc1 createOffer start');

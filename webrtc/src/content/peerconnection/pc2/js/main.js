@@ -24,6 +24,7 @@ try {
   alert('Web Audio API not supported.');
 }
 
+var audioSelector = document.getElementById('audioSelector');
 var startButton = document.getElementById('startButton');
 var callButton = document.getElementById('callButton');
 var hangupButton = document.getElementById('hangupButton');
@@ -136,12 +137,20 @@ function getSignaling(pc) {
   return (pc === pc1) ? signaling1 : signaling2;
 }
 
-function insertFakeAudio(stream) {
+function gotUserMedia(stream) {
+  if(audioSelector.value == 'none') {
+    gotStream(stream);
+  } else {
+    instertFakeAudio(stream, audioSelector.value, gotStream);
+  }
+}
+
+function insertFakeAudio(stream, path, callback) {
   trace('Loading fake stream');
-  loadFakeAudioStream('./audio/obama.mp3', function(fake) {
+  loadFakeAudioStream(path, function(fake) {
     stream.removeTrack(stream.getAudioTracks()[0]);
     stream.addTrack(fake.getAudioTracks()[0]);
-    gotStream(stream);
+    callback(stream);
   });
 }
 
@@ -160,7 +169,7 @@ function start() {
     audio: true,
     video: true
   })
-  .then(insertFakeAudio)
+  .then(gotUserMedia)
   .catch(function(e) {
     alert('getUserMedia() error: ' + e.name);
   });

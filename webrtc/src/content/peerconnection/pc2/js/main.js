@@ -79,7 +79,7 @@ function cleanRemoteMedia(pc) {
   });
   
   elementsToRemove.forEach(function(elm) {
-    elem.remove();
+    elm.remove();
   });
 }
 

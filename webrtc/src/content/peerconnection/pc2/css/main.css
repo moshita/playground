@@ -62,7 +62,7 @@ div#meters div.value {
 }
 
 meter {
-  width: 50%;
+  width: 20%;
 }
 
 meter#clip {

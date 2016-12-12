@@ -383,10 +383,13 @@ var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 function loadFakeAudioStream(path, callback) {
   var request = newXMLHttpRequest();
+  trace('mark - request');
   request.open('GET', path, true);
+  trace('mark - open');
   request.responseType = 'arraybuffer';
   
   request.onload = function() {
+    trace('mark - onload');
     var audioData = request.response;
     audioCtx.decodeAudioData(audioData).then(function(buffer) {
       var source = audioCtx.createBufferSource();
@@ -399,5 +402,8 @@ function loadFakeAudioStream(path, callback) {
       
       callback(node.stream);
     });
-  }
+  };
+  
+  request.send();
+  trace('mark - send');
 }

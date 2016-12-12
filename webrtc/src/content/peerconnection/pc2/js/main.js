@@ -23,7 +23,7 @@ var signaling2 = new WebSocket("wss://test.moshita.xyz");
 var startTime;
 var localVideo = document.getElementById('localVideo');
 //var remoteVideo = document.getElementById('remoteVideo');
-var remoteVideos = document.getElementById('remoteVideos');
+var remoteMedia = document.getElementById('remoteMedia');
 
 localVideo.addEventListener('loadedmetadata', function() {
   trace('Local video videoWidth: ' + this.videoWidth +
@@ -36,6 +36,20 @@ function onRemoteStream(stream) {
   } else {
     trace('Event for existing stream');
   }
+}
+
+function addRemoteAudio(stream){
+  var ra = document.createElement('audio');
+  ra.id = stream.id;
+  ra.autoplay = true;
+  ra.controls = true;
+  ra.addEventListener('loadedmetadata', function() {
+    trace('Remote audio: ' + this.id + ' loaded');
+  });
+
+  ra.srcObject = stream;
+
+  remoteMedia.appendChild(ra);
 }
 
 function addRemoteVideo(stream){
@@ -54,7 +68,7 @@ function addRemoteVideo(stream){
   
   rv.srcObject = stream;
 
-  remoteVideos.appendChild(rv);
+  remoteMedia.appendChild(rv);
 }
 /*
 remoteVideo.addEventListener('loadedmetadata', function() {

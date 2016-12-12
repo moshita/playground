@@ -67,7 +67,7 @@ div#meters div.value {
 }
 
 meter {
-  width: calc(100% - 5em);
+  width: calc(100% - 6em);
 }
 
 meter#clip {

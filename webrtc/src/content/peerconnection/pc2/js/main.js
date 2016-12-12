@@ -13,6 +13,16 @@ var instantMeter = document.querySelector('#instant meter');
 var slowMeter = document.querySelector('#slow meter');
 var clipMeter = document.querySelector('#clip meter');
 
+var instantValueDisplay = document.querySelector('#instant .value');
+var slowValueDisplay = document.querySelector('#slow .value');
+var clipValueDisplay = document.querySelector('#clip .value');
+
+try {
+  window.AudioContext = window.AudioContext || window.webkitAudioContext;
+  window.audioContext = new AudioContext();
+} catch (e) {
+  alert('Web Audio API not supported.');
+}
 
 var startButton = document.getElementById('startButton');
 var callButton = document.getElementById('callButton');
@@ -140,6 +150,7 @@ function gotStream(stream) {
   localVideo.srcObject = stream;
   localStream = stream;
   callButton.disabled = false;
+  handleVolume(stream);
 }
 
 function start() {
@@ -385,8 +396,6 @@ function hangup() {
   callButton.disabled = false;
 }
 
-var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
 function loadFakeAudioStream(path, callback) {
   var request = new XMLHttpRequest();
   trace('mark - request');
@@ -397,9 +406,9 @@ function loadFakeAudioStream(path, callback) {
   request.onload = function() {
     trace('mark - onload');
     var audioData = request.response;
-    audioCtx.decodeAudioData(audioData).then(function(buffer) {
-      var source = audioCtx.createBufferSource();
-      var node = audioCtx.createMediaStreamDestination();
+    window.audioContext.decodeAudioData(audioData).then(function(buffer) {
+      var source = window.audioContext.createBufferSource();
+      var node = window.audioContext.createMediaStreamDestination();
       
       source.buffer = buffer;
       source.connect(node);
@@ -412,4 +421,22 @@ function loadFakeAudioStream(path, callback) {
   
   request.send();
   trace('mark - send');
+}
+
+function handleVolume(stream) {
+  var soundMeter = window.soundMeter = new SoundMeter(window.audioContext);
+  soundMeter.connectToSource(stream, function(e) {
+    if (e) {
+      alert(e);
+      return;
+    }
+    setInterval(function() {
+      instantMeter.value = instantValueDisplay.innerText =
+          soundMeter.instant.toFixed(2);
+      slowMeter.value = slowValueDisplay.innerText =
+          soundMeter.slow.toFixed(2);
+      clipMeter.value = clipValueDisplay.innerText =
+          soundMeter.clip;
+    }, 200);
+  });
 }

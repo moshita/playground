@@ -78,7 +78,7 @@ function cleanRemoteMedia(pc) {
     }) === undefined);
   });
   
-  elementsToReave.forEach(function(elm) {
+  elementsToRemove.forEach(function(elm) {
     elem.remove();
   });
 }

@@ -32,7 +32,7 @@ localVideo.addEventListener('loadedmetadata', function() {
 
 function onRemoteStream(stream) {
   if(document.getElementById(stream.id) == undefined) {
-    addRemoteVideo(stream);
+    addRemoteAudio(stream);
   } else {
     trace('Event for existing stream');
   }

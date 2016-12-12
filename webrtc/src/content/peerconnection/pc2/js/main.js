@@ -56,7 +56,7 @@ function addRemoteVideo(stream){
 
   remoteVideos.appendChild(rv);
 }
-
+/*
 remoteVideo.addEventListener('loadedmetadata', function() {
   trace('Remote video videoWidth: ' + this.videoWidth +
     'px,  videoHeight: ' + this.videoHeight + 'px');
@@ -73,7 +73,7 @@ remoteVideo.onresize = function() {
     startTime = null;
   }
 };
-
+*/
 var localStream;
 var pc1;
 var pc2;

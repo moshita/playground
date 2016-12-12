@@ -48,6 +48,7 @@ video#localVideo {
 
 div#meters > div {
   margin: 0 0 1em 0;
+  width: 30%;
 }
 
 div#meters div.label {

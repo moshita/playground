@@ -59,6 +59,7 @@ function addRemoteAudio(stream){
   ra.id = stream.id;
   ra.autoplay = true;
   ra.controls = true;
+  ra.muted = true;
   ra.addEventListener('loadedmetadata', function() {
     trace('Remote audio: ' + this.id + ' loaded');
   });
@@ -141,7 +142,7 @@ function gotUserMedia(stream) {
   if(audioSelector.value == 'none') {
     gotStream(stream);
   } else {
-    instertFakeAudio(stream, audioSelector.value, gotStream);
+    insertFakeAudio(stream, audioSelector.value, gotStream);
   }
 }
 

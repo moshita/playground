@@ -47,7 +47,7 @@
     var useTrickleICE = false;
     
     var servers = {
-      "iceServers": [{"url": "stun:stun.l.google.com:19302"}]
+      "iceServers": [{"url": "stun:74.125.204.127:19302"}]
     };
   
     var pcs = {};

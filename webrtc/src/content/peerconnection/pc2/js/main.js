@@ -59,9 +59,9 @@ function addRemoteAudio(stream){
   ra.id = stream.id;
   ra.autoplay = true;
   ra.controls = true;
-  ra.muted = true;
   ra.addEventListener('loadedmetadata', function() {
     trace('Remote audio: ' + this.id + ' loaded');
+    ra.muted = true;
   });
 
   ra.srcObject = stream;

@@ -1,0 +1,50 @@
+div#container {
+  margin: 0 auto 0 auto;
+  padding: 1em 1.5em 1.3em 1.5em;
+}
+
+ul li {
+  list-style: none;
+  margin-top: 10px;
+}
+
+label {
+  margin-right: 10px;
+  width:20%;
+  float: left;
+}
+
+ul {
+  width: 80%;  
+  min-width: 600px;
+  padding-right: 40px;
+  margin: 0 auto;
+}
+
+textarea {
+  width: 75%;
+  height: 200px;
+  margin: 0 auto;
+}
+
+input {
+  width: 75%;
+  margin: 0 auto;
+}
+
+button {
+  display: block;
+  width: 120px;
+  margin-right: 3%;
+  margin-left: auto;
+}
+
+div#local {
+  margin: 0 auto 0 auto;
+  padding: 1em 1.5em 1.3em 1.5em;
+  text-align: center;
+}
+
+video {
+  background: #888; 
+}

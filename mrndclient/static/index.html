@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="js/main.js"></script>
+    <link rel="stylesheet" href="css/main.css">
+    <title>MRND Test Client</title>
+  </head>
+  <body>
+    <div id="container">
+      <form>
+        <ul>
+          <li>
+            <label for="url">WebSocket URL</label>
+            <input id="url" type="text" value="wss://mrnd-ne.moshita.xyz/v1/websocket">
+          </li>
+          <li>
+            <button id="connection" type="button">Connect</button>
+          </li>
+          <li>
+            <label for="groupId">Group ID</label>
+            <input id="groupId" type="text" value="001">
+          </li>
+          <li>
+            <label for="name">Your Name</label>
+            <input id="name" type="text" value="test">
+          </li>
+          <li>
+            <button id="group" type="button">Join</button>
+          </li>
+          <li>
+            <label for="communicateTo">Communicate To</label>
+            <input id="communicateTo" type="text">
+          </li>
+          <li>
+            <label for="message">Message</label>
+            <input id="message" type="text">
+          </li>
+          <li>
+            <button id="communicate" type="button">Communicate</button>
+          </li>
+          <li>
+            <label for="output">Output</label>
+            <textarea id="output" readonly></textarea>
+          </li>
+          <li>
+            <button id="clearOutput" type="button">Clear Output</button>
+          </li>
+        </ul>
+      </form>
+    </div>
+  </body>
+</html>

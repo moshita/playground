@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+    <script src="js/call.js"></script>
+    <link rel="stylesheet" href="css/call.css">
+    <title>MRND Test Client</title>
+  </head>
+  <body>
+    <div id="container">
+      <form>
+        <ul>
+          <li>
+            <label for="url">WebSocket URL</label>
+            <input id="url" type="text" value="ws://localhost:8777/v1/websocket">
+          </li>
+          <li>
+            <button id="connection" type="button">Connect</button>
+          </li>
+          <li>
+            <label for="groupId">Group ID</label>
+            <input id="groupId" type="text" value="001">
+          </li>
+          <li>
+            <label for="name">Your Name</label>
+            <input id="name" type="text" value="test">
+          </li>
+          <li>
+            <label for="includeVideo">Include Video</label>
+            <input id="includeVideo" type="checkbox" width="10">
+          </li>
+          <li>
+            <button id="group" type="button">Join</button>
+          </li>
+          <li>
+            <label for="requestSFU">Request SFU</label>
+            <input id="requestSFU" type="checkbox" width="10">
+          </li>
+          <li>
+            <button id="call" type="button">Call</button>
+          </li>
+          <li>
+            <label for="output">Output</label>
+            <textarea id="output" readonly></textarea>
+          </li>
+          <li>
+            <button id="clearOutput" type="button">Clear Output</button>
+          </li>
+        </ul>
+      </form>
+      <div id="local"></div>
+      <div id="remote"></div>
+    </div>
+  </body>
+</html>

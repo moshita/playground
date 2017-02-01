@@ -219,7 +219,7 @@
       attachOutput(_id, pc);
 
       pc.onicecandidate = function(e) {
-        output('onIceCandidate: ' + e.toString());
+        output('onIceCandidate: ' + e.candidate.sdpMid + ' ' + e.candidate.candidate);
         onIceCandidate(_id, e);
       };
       

@@ -182,8 +182,8 @@
       }
       pc.createOffer(constraint).then(function (desc) {
         pc.setLocalDescription(desc).then(function() {
+          output('localDescription is set, ice gathring state = ' + pc.iceGatheringState);
           if(useTrickleICE || pc.iceGatheringState === 'complete') {
-            output('localDescription is set, sending an offer');
             ws.send(JSON.stringify(createRequestObject('dummy', 'communicate', {targets: _id, message: JSON.stringify(desc)})));
           } else {
             output('localDescription is set, waiting for gathering ICE')

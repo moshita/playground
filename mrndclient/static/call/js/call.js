@@ -46,6 +46,10 @@
     
     var useTrickleICE = false;
     
+    var servers = {
+      "iceServers": [{"url": "stun:stun.l.google.com:19302"}]
+    };
+  
     var pcs = {};
 
     var ws;
@@ -156,7 +160,7 @@
       getLocalMediaStream(function (stream) {
         if(stream != undefined) {
           _idArray.forEach( function (id, ix, array) {
-            var pc = new RTCPeerConnection(null);
+            var pc = new RTCPeerConnection(servers);
             pcs[id] = pc;
             setupConnection(id);
 
@@ -270,7 +274,7 @@
       var pc = pcs[_id];
       
       if(pc == undefined) {
-        pc = new RTCPeerConnection();
+        pc = new RTCPeerConnection(servers);
         pcs[_id] = pc;
 
         setupConnection(_id);

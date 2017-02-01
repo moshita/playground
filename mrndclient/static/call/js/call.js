@@ -141,6 +141,7 @@
         ws.send(JSON.stringify(createRequestObject('dummy', 'communicate', {targets: _id, message: JSON.stringify(_e.candidate)})));
         }
       } else {
+        output('iceGatheringState = ' + pc.iceGatheringState);
         if(pc.iceGatheringState == 'complete') {
           // candidates are ready
           output('***********sending ' + pc.localDescription.type);

@@ -222,7 +222,11 @@
       attachOutput(_id, pc);
 
       pc.onicecandidate = function(e) {
-        output('onIceCandidate: ' + e.candidate.sdpMid + ' ' + e.candidate.candidate);
+        id(e.candidate !== undefined) {
+          output('onIceCandidate: ' + e.candidate.sdpMid + ' ' + e.candidate.candidate);
+        } else {
+          output('onIceCandidate: ');
+        } 
         onIceCandidate(_id, e);
       };
       

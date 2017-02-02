@@ -144,9 +144,9 @@
       } else {
         output('iceGatheringState = ' + pc.iceGatheringState);
         if(pc.iceGatheringState == 'complete') {
-          // candidates are ready
-          output('***********sending ' + pc.localDescription.type);
-          ws.send(JSON.stringify(createRequestObject('dummy', 'communicate', {targets: _id, message: JSON.stringify(pc.localDescription)})));
+          //// candidates are ready
+          //output('***********sending ' + pc.localDescription.type);
+          //ws.send(JSON.stringify(createRequestObject('dummy', 'communicate', {targets: _id, message: JSON.stringify(pc.localDescription)})));
         }
       }
     }
@@ -188,12 +188,12 @@
           if(useTrickleICE || pc.iceGatheringState === 'complete') {
             ws.send(JSON.stringify(createRequestObject('dummy', 'communicate', {targets: _id, message: JSON.stringify(desc)})));
           } else {
-            output('localDescription is set, waiting for ice gathering');
-            /*
+            output('localDescription is set, waiting for ice gathering for 5 sec');
+            
             window.setTimeout(function(){
               ws.send(JSON.stringify(createRequestObject('dummy', 'communicate', {targets: _id, message: JSON.stringify(desc)})));
-            }, 3000);
-            */
+            }, 5000);
+            
           }
         }, outputError);
       }, outputError);

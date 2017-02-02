@@ -117,7 +117,7 @@
           audio: true
         }
         if(checkVideo.checked) {
-          constraint.video = {height: {max: 120}, width: { max: 120}};
+          constraint.video = true;//{height: {max: 120}, width: { max: 120}};
         }
         navigator.mediaDevices.getUserMedia(constraint).then(function (stream) {
           lme = document.createElement('video');

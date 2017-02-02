@@ -117,7 +117,7 @@
           audio: true
         }
         if(checkVideo.checked) {
-          constraint.video = true;//{height: {max: 120}, width: { max: 120}};
+          constraint.video = {height: {max: 120}, width: { max: 120}};
         }
         navigator.mediaDevices.getUserMedia(constraint).then(function (stream) {
           lme = document.createElement('video');
@@ -145,8 +145,8 @@
         output('iceGatheringState = ' + pc.iceGatheringState);
         if(pc.iceGatheringState == 'complete') {
           // candidates are ready
-          //output('***********sending ' + pc.localDescription.type);
-          //ws.send(JSON.stringify(createRequestObject('dummy', 'communicate', {targets: _id, message: JSON.stringify(pc.localDescription)})));
+          output('***********sending ' + pc.localDescription.type);
+          ws.send(JSON.stringify(createRequestObject('dummy', 'communicate', {targets: _id, message: JSON.stringify(pc.localDescription)})));
         }
       }
     }
@@ -188,10 +188,12 @@
           if(useTrickleICE || pc.iceGatheringState === 'complete') {
             ws.send(JSON.stringify(createRequestObject('dummy', 'communicate', {targets: _id, message: JSON.stringify(desc)})));
           } else {
-            output('localDescription is set, waiting for three seconds');
+            output('localDescription is set, waiting for ice gathering');
+            /*
             window.setTimeout(function(){
               ws.send(JSON.stringify(createRequestObject('dummy', 'communicate', {targets: _id, message: JSON.stringify(desc)})));
             }, 3000);
+            */
           }
         }, outputError);
       }, outputError);

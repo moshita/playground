@@ -128,6 +128,7 @@
           
           _cb(stream);
         }).catch(function(err) {
+          output(err.name + ': ' + err.message);
           _cb();
         });
       }      

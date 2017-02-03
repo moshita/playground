@@ -95,10 +95,6 @@
         output('[' + _id + '] ice conn state change: ' + _pc.iceConnectionState); 
       };
 
-      _pc.onicegatheringstatechange = function (e) {
-        output('[' + _id + '] ice gathe state change: ' + _pc.iceGatheringState); 
-      };
-
       _pc.onsignalingstatechange = function (e) {
         output('[' + _id + '] signaling state change: ' + _pc.signalingState); 
       };
@@ -134,23 +130,6 @@
       }      
     }
     
-    function onIceCandidate(_id, _e) {
-      var pc = pcs[_id];
-      
-      if(useTrickleICE) {
-        if(_e.candidate != undefined) {
-        ws.send(JSON.stringify(createRequestObject('dummy', 'communicate', {targets: _id, message: JSON.stringify(_e.candidate)})));
-        }
-      } else {
-        output('iceGatheringState = ' + pc.iceGatheringState);
-        if(pc.iceGatheringState == 'complete') {
-          //// candidates are ready
-          //output('***********sending ' + pc.localDescription.type);
-          //ws.send(JSON.stringify(createRequestObject('dummy', 'communicate', {targets: _id, message: JSON.stringify(pc.localDescription)})));
-        }
-      }
-    }
-    
     function callTo(_idArray) {
       if(_idArray.length == 0) {
         output('none to call');
@@ -173,80 +152,71 @@
         }
       });
     }
-
-    function sendOffer(_id) {
-      var pc = pcs[_id];
-      var constraint = {
-        offerToReceiveAudio: 1
-      };
-      if(checkVideo.checked) {
-        constraint.offerToReceiveVideo = 1;
-      }
-      pc.createOffer(constraint).then(function (desc) {
-        pc.setLocalDescription(desc).then(function() {
-          output('localDescription is set, ice gathring state = ' + pc.iceGatheringState);
-          if(useTrickleICE || pc.iceGatheringState === 'complete') {
-            ws.send(JSON.stringify(createRequestObject('dummy', 'communicate', {targets: _id, message: JSON.stringify(desc)})));
-          } else {
-            output('localDescription is set, waiting for ice gathering for 5 sec');
-            
-            window.setTimeout(function(){
-              output('sending ' + desc.type);
-              ws.send(JSON.stringify(createRequestObject('dummy', 'communicate', {targets: _id, message: JSON.stringify(desc)})));
-            }, 5000);
-            
-          }
-        }, outputError);
-      }, outputError);
-    }
     
-    function onNegotiationNeeded(_id, _e) {
-      var pc = pcs[_id];
-      
-      sendOffer(_id);
-    }
-
-    function onTrack(_id, _e) {
-      var pc = pcs[_id];
-      
-      var rme = document.getElementById(_id);
-      rme.srcObject = _e.streams[0];
-    }
-
-    function onAddStream(_id, _e) {
-      var pc = pcs[_id];
-      
-      var rme = document.getElementById(_id);
-      rme.srcObject = _e.stream;
-    }
+    function sendDescription(_id, desc) {
+      output('***********sending ' + desc.type);
+      ws.send(JSON.stringify(createRequestObject('dummy', 'communicate', {targets: _id, message: JSON.stringify(desc)})));
+    };
     
     function setupConnection(_id) {
       var pc = pcs[_id];
 
       attachOutput(_id, pc);
+      
+      var descriptionSent = false;
 
-      pc.onicecandidate = function(e) {
-        if(!e.candidate) {
-          output('onIceCandidate: ');
+      pc.onicecandidate = function onIceCandidate(_e) {
+        if(useTrickleICE) {
+          if(_e.candidate != undefined) {
+            ws.send(JSON.stringify(createRequestObject('dummy', 'communicate', {targets: _id, message: JSON.stringify(_e.candidate)})));
+          }
         } else {
-          output('onIceCandidate: ' + e.candidate.sdpMid + ' ' + e.candidate.candidate);
-        } 
-        onIceCandidate(_id, e);
-      };
-      
-      pc.onnegotiationneeded = function(e) {
-        output('onNegotiationNeeded: ' + e.toString());
-        onNegotiationNeeded(_id, e);
-      };
-      
-      pc.ontrack = function(e) {
-        output('onTrack: ' + e.toString());
-        onTrack(_id, e);
+          output('iceGatheringState = ' + pc.iceGatheringState);
+          if(!_e.candidate && !descriptionSent) {
+            descriptionSent = true;
+            sendDescription(_id, pc.localDescription);
+          }
+        }
       };
 
-      pc.onaddstream = function(e) {
+      pc.onnegotiationneeded = function (_e) {
+        output('onNegotiationNeeded: ' + _e.toString());
+        var constraint = {
+          offerToReceiveAudio: 1
+        };
+        if(checkVideo.checked) {
+          constraint.offerToReceiveVideo = 1;
+        }
+        pc.createOffer(constraint).then(function (desc) {
+          pc.setLocalDescription(desc).then(function() {
+            descriptionSent = false;
+            output('localDescription is set, ice gathring state = ' + pc.iceGatheringState);
+            if((useTrickleICE || pc.iceGatheringState === 'complete') && !descriptionSent) {
+              descriptionSent = true;
+              sendDescription(_id, desc);
+            } else {
+              output('localDescription is set, waiting for ice gathering for 5 sec');
+              /*
+              window.setTimeout(function(){
+                sendLocalDescription(desc);
+              }, 5000);
+              */
+            }
+          }, outputError);
+        }, outputError);      
+      };
+      
+      pc.ontrack = function(_e) {
+        output('onTrack: ' + e.toString());
+        var rme = document.getElementById(_id);
+        rme.srcObject = _e.streams[0];
+      };
+
+      pc.onaddstream = function(_e) {
         output('onAddStream: ' + e.toString());
-        onAddStream(_id, e);
+        
+        var rme = document.getElementById(_id);
+        rme.srcObject = _e.stream;
       };
     }
     
@@ -319,10 +289,10 @@
           pc.createAnswer().then(function(answer) {
             output('[' + _id + '] setting Local Description');
             pc.setLocalDescription(answer).then(function() {
-              output('pc:localDescription completed');
-              if(pc.iceGatheringState == 'complete') {
-                ws.send(JSON.stringify(createRequestObject('dummy', 'communicate', {targets: _id, message: JSON.stringify(answer)})));
-              }
+              output('[' + _id + '] setting Local Description completed');
+              //if(pc.iceGatheringState == 'complete') {
+                sendDescription(_id, answer);
+              //}
 
               /*
               getLocalMediaStream(function (stream) {

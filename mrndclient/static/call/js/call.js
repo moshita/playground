@@ -207,13 +207,13 @@
       };
       
       pc.ontrack = function(_e) {
-        output('onTrack: ' + e.toString());
+        output('onTrack: ' + _e.toString());
         var rme = document.getElementById(_id);
         rme.srcObject = _e.streams[0];
       };
 
       pc.onaddstream = function(_e) {
-        output('onAddStream: ' + e.toString());
+        output('onAddStream: ' + _e.toString());
         
         var rme = document.getElementById(_id);
         rme.srcObject = _e.stream;

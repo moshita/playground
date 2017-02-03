@@ -191,6 +191,7 @@
             output('localDescription is set, waiting for ice gathering for 5 sec');
             
             window.setTimeout(function(){
+              output('sending ' + desc.type);
               ws.send(JSON.stringify(createRequestObject('dummy', 'communicate', {targets: _id, message: JSON.stringify(desc)})));
             }, 5000);
             

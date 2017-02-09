@@ -388,7 +388,7 @@
             } else if (event.type == 'communication') {
               var from = event.communication.from;
               var data = JSON.parse(event.communication.message);
-              output('communication data: ' + ((data.type != undefined) ? data.type : 'candidate'));
+              output('communication data: ' + ((data.description != undefined) ? data.description.type : 'candidate'));
               if(data.description !== undefined) {
                 // received Description
                 gotRemoteDescription(from.member_id, data.description);

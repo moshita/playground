@@ -205,15 +205,30 @@
           }, outputError);
         }, outputError);      
       };
+
+      function outputTracks(prefix, tracks) {
+        tracks.forEach( function (t) {
+          output(prefix + 'TID: ' + t.id + ' Type: ' + t.kind);
+        });
+      }
+      
+      function outputStreams(prefix, streams) {
+        streams.forEach( function (s) {
+          output(prefix + 'SID: ' + s.id);
+          outputTracks(prefix + 'SID: ' + s.id + ' ', s.getTracks());
+        });
+      }
       
       pc.ontrack = function(_e) {
-        output('onTrack: ' + _e.toString());
+        outputTracks('onTrack: ', [ _e.track ]);
+        outputStreams('TID: ' + _e.track.id + ' ', _e.streams);
         var rme = document.getElementById(_id);
         rme.srcObject = _e.streams[0];
       };
 
       pc.onaddstream = function(_e) {
-        output('onAddStream: ' + _e.toString());
+        //output('onAddStream: ' + _e.toString());
+        outputStreams('onAddStream: ', [ _e.stream ]);
         
         var rme = document.getElementById(_id);
         rme.srcObject = _e.stream;

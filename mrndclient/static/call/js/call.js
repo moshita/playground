@@ -155,7 +155,7 @@
     
     function sendDescription(_id, desc) {
       output('***********sending ' + desc.type);
-      ws.send(JSON.stringify(createRequestObject('dummy', 'communicate', {targets: _id, message: JSON.stringify(desc)})));
+      ws.send(JSON.stringify(createRequestObject('dummy', 'communicate', {targets: _id, message: JSON.stringify({description: desc})})));
     };
     
     function setupConnection(_id) {
@@ -389,9 +389,9 @@
               var from = event.communication.from;
               var data = JSON.parse(event.communication.message);
               output('communication data: ' + ((data.type != undefined) ? data.type : 'candidate'));
-              if(data.sdp !== undefined) {
+              if(data.description !== undefined) {
                 // received Description
-                gotRemoteDescription(from.member_id, data);
+                gotRemoteDescription(from.member_id, data.description);
               } else if(data.candidate !== undefined) {
                 // received ICE Candidate
                 gotCandidate(from.member_id, data);

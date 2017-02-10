@@ -381,7 +381,7 @@
               addParticipants(response.group.members);
               if( !(status & STATUS_FLAG_CALL)) {
                 if(response.group.members.some(function(m){ m.member_id == MEMBER_ID_SFU})) {
-                  callTo(MEMBER_ID_SFU);
+                  callTo([MEMBER_ID_SFU]);
                 }
               }
             } else {
@@ -391,7 +391,7 @@
             if(event.type == 'joined') {
               addParticipants([ event.joined.member ]);
               if(event.joined.member.member_id == MEMBER_ID_SFU) {
-                callTo(MEMBER_ID_SFU);
+                callTo([MEMBER_ID_SFU]);
               }
             } else if (event.type == 'left') {
               removeParticipantById(event.left.member.member_id);
@@ -407,8 +407,8 @@
                 gotCandidate(from.member_id, data);
               } else if(data.type == 'call') {
                 var ixMe = data.members.indexOf(myId);
-                var idToCall = data.members.slice(ixMe + 1);
-                callTo(idToCall);
+                var idsToCall = data.members.slice(ixMe + 1);
+                callTo(idsToCall);
               }
             }
           }

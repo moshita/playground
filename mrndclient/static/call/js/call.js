@@ -380,7 +380,9 @@
             } else if (response.type == 'group'){
               addParticipants(response.group.members);
               if( !(status & STATUS_FLAG_CALL)) {
-                if(response.group.members.some(function(m){ m.member_id == MEMBER_ID_SFU})) {
+                if(response.group.members.some(function(m){
+                  return m.member_id == MEMBER_ID_SFU;
+                })) {
                   callTo([MEMBER_ID_SFU]);
                 }
               }

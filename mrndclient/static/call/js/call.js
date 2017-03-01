@@ -224,16 +224,25 @@
       pc.ontrack = function(_e) {
         outputTracks('onTrack: ', [ _e.track ]);
         outputStreams('TID: ' + _e.track.id + ' ', _e.streams);
+        var sid = _e.streams[0].id;
+        if(document.getElementById(sid) == undefined) {
+          var rme = document.createElement('video');
+          rme.id = sid;
+          rme.srcObject = _e.streams[0];
+          divRemote.appendChild(rme);
+        }
+        /*
         var rme = document.getElementById(_id);
         rme.srcObject = _e.streams[0];
+        */
       };
 
       pc.onaddstream = function(_e) {
         //output('onAddStream: ' + _e.toString());
         outputStreams('onAddStream: ', [ _e.stream ]);
         
-        var rme = document.getElementById(_id);
-        rme.srcObject = _e.stream;
+        //var rme = document.getElementById(_id);
+        //rme.srcObject = _e.stream;
       };
     }
     
@@ -292,13 +301,13 @@
         });
 
       }
-
+      /*
       if(document.getElementById(_id) == undefined) {
         var rme = document.createElement('video');
         rme.id = _id;
         divRemote.appendChild(rme);
       }
-      
+      */      
       output('[' + _id + '] setting Remote Description');
       pc.setRemoteDescription(_desc).then( function() {
         if(pc.signalingState == 'have-remote-offer') {
